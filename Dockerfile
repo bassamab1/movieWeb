@@ -9,6 +9,4 @@ COPY . .
 
 EXPOSE 3000
 
-RUN npx prisma generate
-
-CMD ["npm", "run", "start"]
+CMD ["sh", "-c", "npx prisma generate && npm run start"]
