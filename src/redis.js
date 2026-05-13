@@ -8,4 +8,12 @@ redisClient.on("error", (err) => {
   console.log("Redis Error", err);
 });
 
-await redisClient.connect();
+export async function connectRedis() {
+  if (!process.env.REDIS_URL) {
+    console.log("REDIS disabled");
+    return;
+  }
+
+  await redisClient.connect();
+  console.log("Redis connected");
+}

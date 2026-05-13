@@ -7,7 +7,8 @@ RUN npm install
 
 COPY . .
 
-
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma generate && npm run start"]
+RUN npx prisma generate
+
+CMD ["npm", "run", "start"]

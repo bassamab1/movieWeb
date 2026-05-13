@@ -3,12 +3,3 @@ services:
     build: .
     ports:
       - "3000:3000"
-    env_file:
-      - .env
-    depends_on:
-      - redis-server
-
-  redis-server:
-    image: redis
-    ports:
-      - "6379:6379"
