@@ -24,11 +24,12 @@ export const getMoviesService = async () => {
   // 1. check cache
   const cachedMovies = await redis.get("movies");
 
-  if (cachedMovies) {
-    console.log("From Redis Cache");
+const cachedMovies = await redis.get("movies");
 
-    return JSON.parse(cachedMovies);
-  }
+if (cachedMovies) {
+  console.log("From Redis Cache");
+  return JSON.parse(cachedMovies); // safe if always stringified
+}
 
   // 2. if not in cache -> database
   console.log("From Database");
@@ -37,9 +38,9 @@ export const getMoviesService = async () => {
 
   // 3. store in redis for 1 hour
   
-  await redis.set("movies", JSON.stringify(movies), {
-    ex: 3600,
-  });
+ await redis.set("movies", JSON.stringify(movies), {
+  ex: 3600,
+});
 
   return movies;
 };
