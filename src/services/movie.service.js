@@ -20,16 +20,15 @@ export const createMovieService = async (data) => {
 };
 
 export const getMoviesService = async () => {
-  
+
   // 1. check cache
   const cachedMovies = await redis.get("movies");
 
-const cachedMovies = await redis.get("movies");
+  if (cachedMovies) {
+    console.log("From Redis Cache");
 
-if (cachedMovies) {
-  console.log("From Redis Cache");
-  return JSON.parse(cachedMovies); // safe if always stringified
-}
+    return cachedMovies;
+  }
 
   // 2. if not in cache -> database
   console.log("From Database");
@@ -37,10 +36,11 @@ if (cachedMovies) {
   const movies = await prisma.movie.findMany();
 
   // 3. store in redis for 1 hour
-  
- await redis.set("movies", JSON.stringify(movies), {
-  ex: 3600,
-});
+  await redis.set(
+    "movies",
+    JSON.stringify(movies),
+    { ex: 3600 }
+  );
 
   return movies;
 };
