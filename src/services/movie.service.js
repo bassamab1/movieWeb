@@ -1,6 +1,6 @@
 import { prisma } from "../prisma.js";
 import { createError } from "../utils/createError.js";
-import { redisClient } from "../redis.js";
+import { redis } from "../redis.js";
 export const createMovieService = async (data) => {
   const { title, description, releaseYear } = data;
 
@@ -15,14 +15,14 @@ export const createMovieService = async (data) => {
   const movies= await prisma.movie.create({
     data,
   });
-   await redisClient.del("movies");
+   await redis.del("movies");
    return movies;
 };
 
 export const getMoviesService = async () => {
   
   // 1. check cache
-  const cachedMovies = await redisClient.get("movies");
+  const cachedMovies = await redis.get("movies");
 
   if (cachedMovies) {
     console.log("From Redis Cache");
@@ -36,7 +36,7 @@ export const getMoviesService = async () => {
   const movies = await prisma.movie.findMany();
 
   // 3. store in redis for 1 hour
-  await redisClient.setEx(
+  await redis.setEx(
     "movies",
     3600,
     JSON.stringify(movies)
@@ -57,7 +57,7 @@ export const deleteMovieService = async (id) => {
   await prisma.movie.delete({
     where: { id },
   });
-   await redisClient.del("movies");
+   await redis.del("movies");
 
   return true;
 };
