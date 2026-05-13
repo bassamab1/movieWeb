@@ -36,11 +36,10 @@ export const getMoviesService = async () => {
   const movies = await prisma.movie.findMany();
 
   // 3. store in redis for 1 hour
-  await redis.setEx(
-    "movies",
-    3600,
-    JSON.stringify(movies)
-  );
+  
+  await redis.set("movies", JSON.stringify(movies), {
+    ex: 3600,
+  });
 
   return movies;
 };
