@@ -15,6 +15,7 @@ export const createMovie = async (req, res, next) => {
 };
 
 export const getMovies = async (req, res, next) => {
+  
   const movies = await movieService.getMoviesService();
 
   res.json({ message: "Movies", movies });

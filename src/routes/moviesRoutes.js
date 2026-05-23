@@ -4,11 +4,12 @@ import {
   deleteMovie,
   getMovies,
 } from "../controllers/moviesControllers.js";
+import { adminMiddleware } from "../middlewares/adminMiddleware.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/movies", getMovies);
-router.post("/movies", createMovie);
-router.delete("/movies/:id", deleteMovie);
-
+router.get("/movies", authMiddleware, getMovies);
+router.post("/movies",authMiddleware,adminMiddleware, createMovie);
+router.delete("/movies/:id",authMiddleware,adminMiddleware, deleteMovie);
 export default router;
