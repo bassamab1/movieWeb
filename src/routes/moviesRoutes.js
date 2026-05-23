@@ -6,7 +6,7 @@ import {
 } from "../controllers/moviesControllers.js";
 import { adminMiddleware } from "../middlewares/adminMiddleware.js";
 import { authMiddleware } from "../middlewares/authMiddleware.js";
-import rateLimit from "express-rate-limit";
+import { apiLimiter } from "../middlewares/rateLimiter.js";
 
 const router = express.Router();
 
